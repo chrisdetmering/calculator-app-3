@@ -1,6 +1,6 @@
 #main{
     background-color: #f0efef;
-    border: 1.5px solid gray;
+    border: 1.5px solid #c2d4dd;
     justify-content: center;
     width: 300px;
     height: 400px;
@@ -10,6 +10,9 @@
 
 #display{
     height: 20%;
+    font-family: 'Share Tech Mono', sans-serif;
+    text-align: right;
+    font-size: 60px;
 }
 
 #calculator{
