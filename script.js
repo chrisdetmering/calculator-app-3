@@ -29,6 +29,13 @@ function addOperator(operator){
     if(fullOperation.length === 0 || isNaN(fullOperation.slice(-1))){
         return
     }
+
+    if(operator === '%') {
+        currentSelection = parseFloat(currentSelection) / 100;
+        fullOperation[fullOperation.length - 1] = currentSelection;
+        updateDisplay();
+        return;
+    } 
     
     if(currentOperator.length === 0){
         currentOperator = operator;
