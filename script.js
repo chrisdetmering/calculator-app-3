@@ -83,7 +83,12 @@ function addOperator(operator){
 
 /***************************  Helper Functions ****************************/
 function updateDisplay(){
-    document.getElementById('current-selection').textContent = currentSelection;
+    if(currentSelection.length > 10){
+        const converted = convertExponent()
+        document.getElementById('current-selection').textContent = converted;
+    } else {
+        document.getElementById('current-selection').textContent = currentSelection;
+    }
     document.getElementById('full-selection').textContent = '';
     fullOperation.map((item) => {
         document.getElementById('full-selection').textContent += item
@@ -110,6 +115,12 @@ function updateTotal(){
     } else {
         currentSelection = total;
     }
+}
+
+function convertExponent(){
+    const length = currentSelection.length - 1;
+    const num = currentSelection.charAt(0);
+    return `${num}e${length}`
 }
 
 function resetValues() {
