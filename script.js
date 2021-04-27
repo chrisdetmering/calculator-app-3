@@ -1,21 +1,17 @@
+//Global variables
 let currentSelection = '';
 let currentOperator = '';
 let fullOperation = [];
 let total = 0;
 let firstNumber = 0;
 
-
+/***************************  Button Functions ****************************/
 function selectNumber(number){
+    console.log(fullOperation.slice(-1) === ".")
     currentSelection += number;
     fullOperation.push(number);
 
     updateDisplay();
-}
-
-function updateDisplay(){
-    document.getElementById('current-selection').textContent = currentSelection;
-    document.getElementById('full-selection').textContent = '';
-    fullOperation.map((item) => document.getElementById('full-selection').textContent += item);
 }
 
 function clearDisplay(){
@@ -25,43 +21,67 @@ function clearDisplay(){
     resetValues();
 }
 
-function addOperator(operator){
+function selectOperator(operator){
     if(fullOperation.length === 0 || isNaN(fullOperation.slice(-1))){
         return
     }
-
     if(operator === '%') {
-        currentSelection = parseFloat(currentSelection) / 100;
-        fullOperation[fullOperation.length - 1] = currentSelection;
-        updateDisplay();
-        return;
-    } 
-    
-    if(currentOperator.length === 0){
-        currentOperator = operator;
-        firstNumber = currentSelection;
-        fullOperation.push(operator);
-
-        updateDisplay()
-        currentSelection = '';
+        handlePercent()
+    } else if(currentOperator.length === 0){
+        handleFirstOperator()
     } else if (operator === '='){
-        updateTotal()
-
-        currentSelection = total;
-        updateDisplay()
-
-        resetValues()
+        handleEquals();
     } else {
-        updateTotal()
-
-        currentSelection = total;
-        firstNumber = total;
-        fullOperation.push(operator);
-        updateDisplay()
-
-        currentSelection = '';
-        currentOperator = operator;
+        addOperator();
     }
+}
+/**************************************************************************/
+
+/***********************  Button Operation Functions **********************/
+function handlePercent(){
+    currentSelection = parseFloat(currentSelection) / 100;
+    while(!isNaN(fullOperation.slice(-1))){
+        fullOperation.pop()
+    }
+    fullOperation.push(currentSelection);
+
+    updateDisplay();
+}
+
+function handleFirstOperator(){
+    currentOperator = operator;
+    firstNumber = currentSelection;
+    fullOperation.push(operator);
+
+    updateDisplay()
+    currentSelection = '';
+}
+
+function handleEquals(){
+    updateTotal()
+    updateDisplay()
+    resetValues()
+}
+
+function addOperator(){
+    updateTotal()
+
+    firstNumber = total;
+    fullOperation.push(operator);
+    updateDisplay()
+
+    currentSelection = '';
+    currentOperator = operator;
+}
+/**************************************************************************/
+
+/***************************  Helper Functions ****************************/
+function updateDisplay(){
+    document.getElementById('current-selection').textContent = currentSelection;
+    document.getElementById('full-selection').textContent = '';
+    fullOperation.map((item) => {
+        document.getElementById('full-selection').textContent += item
+    });
 }
 
 function updateTotal(){
@@ -79,6 +99,7 @@ function updateTotal(){
             total = parseFloat(firstNumber) - parseFloat(currentSelection);
             break;
     }
+    currentSelection = total;
 }
 
 function resetValues() {
