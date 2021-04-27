@@ -7,7 +7,13 @@ let firstNumber = 0;
 
 /***************************  Button Functions ****************************/
 function selectNumber(number){
-    console.log(fullOperation.slice(-1) === ".")
+    if(number === '.'){
+        if(fullOperation[fullOperation.length - 1] === '.') return
+        if(currentSelection.includes('.')) return
+    }
+    if(currentSelection.length === 10) return
+    if(currentSelection.length === 0 && number === 0) return
+
     currentSelection += number;
     fullOperation.push(number);
 
@@ -28,11 +34,11 @@ function selectOperator(operator){
     if(operator === '%') {
         handlePercent()
     } else if(currentOperator.length === 0){
-        handleFirstOperator()
+        handleFirstOperator(operator)
     } else if (operator === '='){
         handleEquals();
     } else {
-        addOperator();
+        addOperator(operator);
     }
 }
 /**************************************************************************/
@@ -48,7 +54,7 @@ function handlePercent(){
     updateDisplay();
 }
 
-function handleFirstOperator(){
+function handleFirstOperator(operator){
     currentOperator = operator;
     firstNumber = currentSelection;
     fullOperation.push(operator);
@@ -63,7 +69,7 @@ function handleEquals(){
     resetValues()
 }
 
-function addOperator(){
+function addOperator(operator){
     updateTotal()
 
     firstNumber = total;
@@ -99,7 +105,11 @@ function updateTotal(){
             total = parseFloat(firstNumber) - parseFloat(currentSelection);
             break;
     }
-    currentSelection = total;
+    if(total.toString().length > 10){
+        currentSelection = total.toFixed(2)
+    } else {
+        currentSelection = total;
+    }
 }
 
 function resetValues() {
