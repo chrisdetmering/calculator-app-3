@@ -1,14 +1,13 @@
 let currentSelection = '';
 let currentOperator = '';
-let fullSelection = [];
+let fullOperation = [];
 let total = 0;
 let firstNumber = 0;
-let secondNumber = 0;
 
 
 function selectNumber(number){
     currentSelection += number;
-    fullSelection.push(number);
+    fullOperation.push(number);
 
     updateDisplay();
 }
@@ -16,45 +15,69 @@ function selectNumber(number){
 function updateDisplay(){
     document.getElementById('current-selection').textContent = currentSelection;
     document.getElementById('full-selection').textContent = '';
-    fullSelection.map((item) => document.getElementById('full-selection').textContent += item);
+    fullOperation.map((item) => document.getElementById('full-selection').textContent += item);
 }
 
 function clearDisplay(){
-
     document.getElementById('current-selection').textContent = '0'
     document.getElementById('full-selection').textContent = '';
+
+    resetValues();
 }
 
 function addOperator(operator){
-    document.getElementById('full-selection').textContent += operator;
-
+    if(fullOperation.length === 0 || isNaN(fullOperation.slice(-1))){
+        return
+    }
+    
     if(currentOperator.length === 0){
         currentOperator = operator;
         firstNumber = currentSelection;
-        fullSelection.push(operator);
+        fullOperation.push(operator);
+
+        updateDisplay()
         currentSelection = '';
+    } else if (operator === '='){
+        updateTotal()
+
+        currentSelection = total;
+        updateDisplay()
+
+        resetValues()
     } else {
-        switch(currentOperator){
-            case 'x':
-                total = parseFloat(firstNumber) * parseFloat(currentSelection);
-                break;
-            case '/':
-                total = parseFloat(firstNumber) / parseFloat(currentSelection);
-                break;
-            case '+':
-                total = parseFloat(firstNumber) + parseFloat(currentSelection);
-                break;
-            case '-':
-                total = parseFloat(firstNumber) - parseFloat(currentSelection);
-                break;
-        }
+        updateTotal()
 
         currentSelection = total;
         firstNumber = total;
-        fullSelection.push(operator);
+        fullOperation.push(operator);
         updateDisplay()
 
         currentSelection = '';
         currentOperator = operator;
     }
+}
+
+function updateTotal(){
+    switch(currentOperator){
+        case 'x':
+            total = parseFloat(firstNumber) * parseFloat(currentSelection);
+            break;
+        case '/':
+            total = parseFloat(firstNumber) / parseFloat(currentSelection);
+            break;
+        case '+':
+            total = parseFloat(firstNumber) + parseFloat(currentSelection);
+            break;
+        case '-':
+            total = parseFloat(firstNumber) - parseFloat(currentSelection);
+            break;
+    }
+}
+
+function resetValues() {
+    currentSelection = '';
+    fullOperation = [];
+    total = 0;
+    firstNumber = 0;
+    currentOperator = '';
 }
