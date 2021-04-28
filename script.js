@@ -6,7 +6,15 @@ let total = 0;
 let firstNumber = 0;
 
 /***************************  Button Functions ****************************/
-function selectNumber(number){
+document.querySelectorAll(".number").forEach(numberButton => { 
+    numberButton.addEventListener("click", () => { 
+        const number = numberButton.textContent; 
+        setNumber(number);
+    })
+})
+
+
+function setNumber(number){
     if(number === '.'){
         if(fullOperation[fullOperation.length - 1] === '.') return
         if(currentSelection.includes('.')) return
@@ -20,20 +28,31 @@ function selectNumber(number){
     updateDisplay();
 }
 
+document.querySelector(".clear")
+.addEventListener("click", () => { 
+    clearDisplay();
+})
+
+
 function clearDisplay(){
     document.getElementById('current-selection').textContent = '0'
     document.getElementById('full-selection').textContent = '';
-
     resetValues();
 }
 
-function selectOperator(operator){
+document.querySelectorAll(".operator").forEach(operatorButton => { 
+    operatorButton.addEventListener("click", () => { 
+        const operator = operatorButton.textContent; 
+        debugger; 
+        setOperator(operator)
+    })
+})
+
+function setOperator(operator){
     if(fullOperation.length === 0 || isNaN(fullOperation.slice(-1))){
         return
     }
-    if(operator === '%') {
-        handlePercent()
-    } else if(currentOperator.length === 0){
+    if(currentOperator.length === 0){
         handleFirstOperator(operator)
     } else if (operator === '='){
         handleEquals();
@@ -44,15 +63,7 @@ function selectOperator(operator){
 /**************************************************************************/
 
 /***********************  Button Operation Functions **********************/
-function handlePercent(){
-    currentSelection = parseFloat(currentSelection) / 100;
-    while(!isNaN(fullOperation.slice(-1))){
-        fullOperation.pop()
-    }
-    fullOperation.push(currentSelection);
 
-    updateDisplay();
-}
 
 function handleFirstOperator(operator){
     currentOperator = operator;
