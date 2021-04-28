@@ -45,11 +45,21 @@
     transition-duration: 0.1s;
 }
 
+.clear {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+
 .large{
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
 .operator{
+    background-color: #c2d4dd;
+}
+
+.equals {
     background-color: #c2d4dd;
 }
